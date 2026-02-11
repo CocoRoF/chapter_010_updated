@@ -1,8 +1,6 @@
 import streamlit as st
+######### LangSmith가 요구하는 uuid7기반으로 변경 #########
 from langsmith import uuid7
-from dotenv import load_dotenv
-
-load_dotenv()
 
 from langchain.agents import create_agent
 from langchain.agents.middleware import SummarizationMiddleware
@@ -20,7 +18,6 @@ from tools.fetch_stores_by_prefecture import fetch_stores_by_prefecture
 # cache / feedback
 from src.cache import Cache
 from src.feedback import add_feedback
-
 
 
 @st.cache_data
@@ -43,6 +40,7 @@ def init_messages():
         )
         st.session_state.messages = [{"role": "assistant", "content": welcome_message}]
         st.session_state["checkpointer"] = InMemorySaver()
+        ######### LangSmith가 요구하는 uuid7기반으로 변경 #########
         st.session_state["thread_id"] = str(uuid7())
 
     st.session_state["first_question"] = len(st.session_state.messages) == 1
@@ -116,6 +114,7 @@ def main():
 
         with st.chat_message("assistant"):
             with st.spinner("답변 생성 중..."):
+                ######### LangSmith가 요구하는 uuid7기반으로 변경 #########
                 run_id = uuid7()
                 result = customer_support_agent.invoke(
                     {"messages": [{"role": "user", "content": prompt}]},
